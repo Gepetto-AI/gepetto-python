@@ -1,0 +1,51 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "gepetto"
+dynamic = ["version"]
+description = "The official Python SDK of the Gepetto API v2: real estate photo editing. Enhance, declutter, furnish, blue sky, restyle, walls and floors, upscale."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.10"
+authors = [{ name = "Gepetto", email = "api@gepettoapp.com" }]
+keywords = ["gepetto", "real estate", "virtual staging", "home staging", "photo editing", "declutter", "api", "sdk"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Multimedia :: Graphics",
+    "Typing :: Typed",
+]
+dependencies = []
+
+[project.urls]
+Homepage = "https://gepettoapp.com"
+Documentation = "https://docs.gepettoapp.com"
+Source = "https://github.com/Gepetto-AI/gepetto-python"
+Issues = "https://github.com/Gepetto-AI/gepetto-python/issues"
+
+[tool.hatch.version]
+path = "src/gepetto/_version.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/gepetto"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src/gepetto", "README.md", "LICENSE", "CHANGELOG.md"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.mypy]
+strict = true
+files = ["src/gepetto"]

@@ -1,0 +1,25 @@
+# Publishes to PyPI when a version tag is pushed: git tag v0.1.1 && git push --tags
+# No token: PyPI trusts this workflow (trusted publishing, environment "pypi").
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Check that the tag matches the version
+        run: |
+          version=$(python -c "exec(open('src/gepetto/_version.py').read()); print(__version__)")
+          test "v$version" = "$GITHUB_REF_NAME" || { echo "Tag $GITHUB_REF_NAME but version $version in _version.py"; exit 1; }
+      - run: pip install build && python -m build
+      - uses: pypa/gh-action-pypi-publish@release/v1
