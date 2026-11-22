@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.1
+
+- Support email: contact@gepettoapp.com.
+
 ## 0.1.0
 
 - Every tool of the Gepetto API v2: enhance, declutter, furnish, sunshine, creative_redesign, surfaces, upscale.

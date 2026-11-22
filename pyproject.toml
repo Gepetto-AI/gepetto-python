@@ -10,7 +10,7 @@ readme = "README.md"
 license = "MIT"
 license-files = ["LICENSE"]
 requires-python = ">=3.10"
-authors = [{ name = "Gepetto", email = "api@gepettoapp.com" }]
+authors = [{ name = "Gepetto", email = "contact@gepettoapp.com" }]
 keywords = ["gepetto", "real estate", "virtual staging", "home staging", "photo editing", "declutter", "api", "sdk"]
 classifiers = [
     "Development Status :: 4 - Beta",
