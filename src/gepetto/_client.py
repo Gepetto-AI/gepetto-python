@@ -21,6 +21,12 @@ DEFAULT_TIMEOUT = 600.0
 DEFAULT_MAX_RETRIES = 2
 # Seconds between two checks of a running job
 POLL_INTERVAL = 2.5
+# Seconds a video waits by default: it takes 2 to 10 minutes, and the API gives it up after 30
+VIDEO_TIMEOUT = 1800.0
+
+CameraMove = Literal[
+    "zoom_in", "zoom_out", "zoom_in_pan_left", "zoom_in_pan_right", "crane_up", "crane_down", "crab_left", "crab_right"
+]
 
 
 class Gepetto:
@@ -253,6 +259,60 @@ class Gepetto:
             "/upscale", {"url": url, "resolution": resolution, "webhook": webhook}, idempotency_key, timeout
         )
 
+    # --- Videos: 6 seconds, MP4, live keys only ---------------------------------------------------------------
+    # A video takes 2 to 10 minutes: the method waits up to 30 minutes (or set timeout), or returns at once with
+    # webhook.
+
+    def camera_move(
+        self,
+        *,
+        url: str,
+        camera: CameraMove,
+        timelapse: bool | None = None,
+        resolution: Literal["768p", "1080p"] | None = None,
+        webhook: str | None = None,
+        idempotency_key: str | None = None,
+        timeout: float | None = None,
+    ) -> Job:
+        """A slow camera move in the photo. timelapse: the hours of the day passing, ending at night. 0.80 € per video."""
+        return self._render(
+            "/video/camera-move",
+            {"url": url, "camera": camera, "timelapse": timelapse, "resolution": resolution, "webhook": webhook},
+            idempotency_key,
+            timeout if timeout is not None else VIDEO_TIMEOUT,
+        )
+
+    def transition(
+        self,
+        *,
+        job_id: str | None = None,
+        url: str | None = None,
+        end_url: str | None = None,
+        transition_id: str | None = None,
+        prompt: str | None = None,
+        negative_prompt: str | None = None,
+        webhook: str | None = None,
+        idempotency_key: str | None = None,
+        timeout: float | None = None,
+    ) -> Job:
+        """From a photo to its edited version. The images: job_id (a finished render: its original goes to its result),
+        or url and end_url of the same proportions. The animation: transition_id (list_transitions()) or your own
+        prompt, in English. 1.60 € per video."""
+        return self._render(
+            "/video/transition",
+            {
+                "jobId": job_id,
+                "url": url,
+                "endUrl": end_url,
+                "transitionId": transition_id,
+                "prompt": prompt,
+                "negativePrompt": negative_prompt,
+                "webhook": webhook,
+            },
+            idempotency_key,
+            timeout if timeout is not None else VIDEO_TIMEOUT,
+        )
+
     # --- Jobs -----------------------------------------------------------------------------------------------------
 
     def get_job(self, job_id: str) -> Job:
@@ -287,6 +347,10 @@ class Gepetto:
     def list_skies(self) -> list[dict[str, Any]]:
         """sky_id."""
         return self._get("/skies")  # type: ignore[no-any-return]
+
+    def list_transitions(self) -> list[dict[str, Any]]:
+        """transition_id: the animations of transition(), with a sample video in "preview" when there is one."""
+        return self._get("/video/transitions")  # type: ignore[no-any-return]
 
     def list_surfaces(self) -> dict[str, list[dict[str, Any]]]:
         """wall_type, floor_type and finish_id: {"walls": [...], "floors": [...], "finishes": [...]}."""

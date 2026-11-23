@@ -20,12 +20,14 @@ class Job:
     status: str
     """``pending``, ``processing``, ``success`` or ``error``."""
     tool: str
-    """``declutter``, ``furnish``, ``sunshine``, ``creative-redesign``, ``surfaces``, ``enhance`` or ``upscale``."""
+    """``declutter``, ``furnish``, ``sunshine``, ``creative-redesign``, ``surfaces``, ``enhance``, ``upscale``,
+    ``camera-move`` or ``transition``."""
     mode: str | None
     """declutter and furnish: ``auto`` or ``zone``; sunshine: the sky id; surfaces: ``walls``, ``floor`` or ``finish``;
     enhance: ``straighten`` or None; upscale: ``2k`` or ``4k``; creative-redesign: None."""
     output: str | None
-    """The image, once ``status`` is ``success``. A public URL: copy the image to your storage if you keep it."""
+    """The image (an MP4 video for camera-move and transition), once ``status`` is ``success``. A public URL: copy
+    it to your storage if you keep it."""
     error: JobError | None
     price_cents: int
     """Price in euro cents (0 with a test key; charged only on success)."""

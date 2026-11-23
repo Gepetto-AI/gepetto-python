@@ -81,6 +81,23 @@ gepetto.enhance(
 )
 ```
 
+## Videos
+
+Two 6-second videos, as MP4. They need a live key (a test key gets `live_key_required`) and take 2 to 10 minutes: the method waits up to 30 minutes, or returns at once with `webhook`.
+
+| Method | What it does |
+| --- | --- |
+| `camera_move(url=..., camera="zoom_in")` | A slow camera move in the photo (`zoom_out`, `crane_up`, `crab_left`...; also `timelapse`, `resolution`), 0.80 € |
+| `transition(job_id=..., transition_id=...)` | From the original of a finished render to its result, 1.60 € |
+| `transition(url=..., end_url=..., prompt=...)` | From one photo to another, with your own animation |
+
+```python
+staged = gepetto.furnish(url=photo_url, room_id="living_room", style_id="scandinave")
+transitions = gepetto.list_transitions()  # the animations, with their names
+video = gepetto.transition(job_id=staged.id, transition_id=transitions[0]["id"])
+print(video.output)  # https://assets.gepettoapp.com/api/v2/jobs/.../output.mp4
+```
+
 ## Lists
 
 The ids are not guessable: they come from the API.
@@ -90,6 +107,7 @@ gepetto.list_rooms()       # room_id, with the modes of each room ("auto": whole
 gepetto.list_styles()      # style_id
 gepetto.list_furnitures()  # furniture_id, grouped by type
 gepetto.list_skies()       # sky_id
+gepetto.list_transitions() # transition_id
 gepetto.list_surfaces()    # {"walls": [...], "floors": [...], "finishes": [...]}
 ```
 

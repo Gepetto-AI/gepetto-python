@@ -186,3 +186,25 @@ def test_a_webhook_with_a_wrong_signature_is_refused() -> None:
 def test_an_old_webhook_is_refused() -> None:
     with pytest.raises(GepettoError, match="timestamp too old"):
         verify_webhook("{}", signed("{}", "whsec_test", at=int(time.time()) - 3600), "whsec_test")
+
+
+def test_a_video_is_followed_until_the_mp4_is_ready() -> None:
+    api = FakeApi(
+        (202, job("processing", tool="camera-move", mode="zoom_in")),
+        (200, job("success", "https://img/output.mp4", tool="camera-move", mode="zoom_in")),
+    )
+
+    result = client(api).camera_move(url="https://img/p.jpg", camera="zoom_in")
+
+    assert result.output == "https://img/output.mp4"
+    assert api.requests[0]["url"].endswith("/v2/video/camera-move")
+    assert api.requests[0]["body"] == {"url": "https://img/p.jpg", "camera": "zoom_in"}
+
+
+def test_a_transition_from_a_job_sends_the_api_names() -> None:
+    api = FakeApi((202, job("processing", tool="transition", mode="custom")))
+
+    client(api).transition(job_id="job_9", prompt="The furniture appears", webhook="https://me/hook")
+
+    assert api.requests[0]["url"].endswith("/v2/video/transition")
+    assert api.requests[0]["body"] == {"jobId": "job_9", "prompt": "The furniture appears", "webhook": "https://me/hook"}

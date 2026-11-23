@@ -9,7 +9,7 @@
     print(job.output)
 """
 
-from ._client import DEFAULT_BASE_URL, Gepetto, mask_from_file
+from ._client import DEFAULT_BASE_URL, CameraMove, Gepetto, mask_from_file
 from ._errors import GepettoError, TransportError
 from ._job import Job, JobError, JobStatus
 from ._transport import Transport, urllib_transport
@@ -18,6 +18,7 @@ from ._webhook import verify_webhook
 
 __all__ = [
     "DEFAULT_BASE_URL",
+    "CameraMove",
     "Gepetto",
     "GepettoError",
     "Job",
