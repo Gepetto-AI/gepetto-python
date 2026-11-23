@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.0
+
+- Videos: `camera_move()` (0.80 €) and `transition()` (1.60 €), `list_transitions()`. Live keys only; they wait up to 30 minutes, or return at once with `webhook`.
+
 ## 0.1.1
 
 - Support email: contact@gepettoapp.com.
